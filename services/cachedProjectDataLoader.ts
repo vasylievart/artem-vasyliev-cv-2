@@ -19,26 +19,21 @@ export async function cachedProjectDataLoader<T>(
   const cached = getCache<T>(key);
 
   if (cached?.data && now - cached.timestamp < TTL) {
-    console.log("[CACHE HIT]", key);
     return cached.data;
   }
 
 
   if (cached?.promise) {
-    console.log("[CACHE PENDING]", key);
     return cached.promise;
   }
 
-  console.log("[CACHE MISS]", key);
 
   const promise = fetchProjectData<T>(resource, lang, section, display, tag, signal)
     .then(data => {
-      console.log("[CACHE STORE]", key);
       setCache(key, { data, timestamp: Date.now() });
       return data;
     })
     .catch(err => {
-      console.log("[CHACHE DELETE]", key);
       deleteCache(key);
       throw err;
     });

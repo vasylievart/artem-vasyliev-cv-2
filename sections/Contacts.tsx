@@ -1,13 +1,13 @@
-import { Instagram, Linkedin, Github, Facebook, Phone, Mail } from "lucide-react";
+import {  Phone, Mail } from "lucide-react";
 import Image from "next/image";
 
 export default function Contact() {
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-3xl h-104">
       <h1 className="text-4xl font-bold mb-6">Contacts</h1>
 
       <div className="space-y-4 text-neutral-300">
-        <a href="https://instagram.com/your" target="_blank" className="flex items-center gap-3 hover:text-white">
+        <a href="https://www.instagram.com/av.programmer/" target="_blank" className="flex items-center gap-3 hover:text-white">
           <Image src={"/contacts/instagram_icon.png"} alt={"Instagram"} width={20} height={20}/> 
           Instagram
         </a>
