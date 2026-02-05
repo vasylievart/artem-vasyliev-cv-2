@@ -4,7 +4,7 @@ import Image from "next/image";
 import { CarouselImage, Project } from "@/types";
 import { useProjectModal } from "@/hooks/useProjectModal";
 import dynamic from 'next/dynamic';
-import { fetchProjectDataWithoutSignal } from "@/api/fetchProjectDataWithoutSignal";
+import { fetchProjectDataWithoutSignal } from "@/api/fetchProjectData";
 import LaptopPreviewModal from "./LaptopPreviewModal";
 import MobilePreviewModal from "./MobilePreviewModal";
 import { useEffect, useRef, useState } from "react";

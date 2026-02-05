@@ -1,7 +1,7 @@
 "use client";
 
 import { Lang, LanguageContextProps } from "@/types";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext } from "react";
 
 
 const translations: Record<Lang, Record<string, string>> = {
@@ -32,7 +32,8 @@ export const LanguageProvider = ({
   children: React.ReactNode; 
   initialLang: Lang;
 }) => {
-  const [lang, setLang] = useState<Lang>(initialLang);
+  
+  const lang = initialLang as Lang;
   const toggleLang = () => {
     const newLang = lang === "en" ? "es" : "en";
     window.location.pathname = `/${newLang}`;
@@ -51,24 +52,3 @@ export const useLang = () => {
   if (!ctx) throw new Error("LanguageContext not found");
   return ctx;
 };
-
-
-/*const LanguageContext = createContext<LanguageContextProps | null>(null);
-
-export const LanguageProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-  const [lang, setLang] = useState<Lang>("en");
-
-  const toggleLang = () => setLang((prev) => (prev === "en" ? "es" : "en"));
-
-  const t = (key: string) => translations[lang][key] || key;
-
-  return (
-    <LanguageContext.Provider value={{ lang, toggleLang, t }}>
-      {children}
-    </LanguageContext.Provider>
-  );
-};*/

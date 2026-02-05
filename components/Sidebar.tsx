@@ -5,7 +5,7 @@ import Toogle from "@/ui/toogle";
 import Image from "next/image";
 import { useActiveSection } from "@/hooks/useActiveSection";
 
-export const Sidebar = ({lang}: {lang: string}) => {
+export const Sidebar = () => {
   const { t } = useLang();
 
   const sections = ["about", "cv", "projects", "contact"];
