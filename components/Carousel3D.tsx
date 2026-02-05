@@ -1,13 +1,14 @@
-"use client";
-
+"use client"
 import { useState } from "react";
 import clsx from "clsx";
 import { Carousel3DProps, DisplayType } from "@/types";
-import CarouselCard from "./CarouselCard";
 import { useCarouselPositions } from "@/hooks/useCarouselPositions";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import dynamic from "next/dynamic";
 
-
+const CarouselCard = dynamic(() => import('./CarouselCard'), {
+  loading: () => <div className="h-64 bg-neutral-800 animate-pulse rounded" />,
+});
 
 export default function Carousel3D({ images, display }: Carousel3DProps) {
   const [active, setActive] = useState(0);

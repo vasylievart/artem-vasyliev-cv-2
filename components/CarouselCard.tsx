@@ -21,6 +21,7 @@ const CarouselCard = ({
         alt={alt}
         width={720}
         height={450}
+        loading="lazy"
         className="rounded-xl shadow-xl border border-white/10"
       />
       {index === active && (

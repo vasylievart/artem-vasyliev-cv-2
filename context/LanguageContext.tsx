@@ -21,7 +21,39 @@ const translations: Record<Lang, Record<string, string>> = {
   },
 };
 
+
+
 const LanguageContext = createContext<LanguageContextProps | null>(null);
+
+export const LanguageProvider = ({
+  children,
+  initialLang,
+} : {
+  children: React.ReactNode; 
+  initialLang: Lang;
+}) => {
+  const [lang, setLang] = useState<Lang>(initialLang);
+  const toggleLang = () => {
+    const newLang = lang === "en" ? "es" : "en";
+    window.location.pathname = `/${newLang}`;
+  };
+  const t = (key: string) => translations[lang][key] ||  key;
+
+  return (
+    <LanguageContext.Provider value={{ lang, toggleLang, t }}>
+      {children}
+    </LanguageContext.Provider>
+  )
+}
+
+export const useLang = () => {
+  const ctx = useContext(LanguageContext);
+  if (!ctx) throw new Error("LanguageContext not found");
+  return ctx;
+};
+
+
+/*const LanguageContext = createContext<LanguageContextProps | null>(null);
 
 export const LanguageProvider = ({
   children,
@@ -39,10 +71,4 @@ export const LanguageProvider = ({
       {children}
     </LanguageContext.Provider>
   );
-};
-
-export const useLang = () => {
-  const ctx = useContext(LanguageContext);
-  if (!ctx) throw new Error("LanguageContext not found");
-  return ctx;
-};
+};*/

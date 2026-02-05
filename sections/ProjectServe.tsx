@@ -1,25 +1,12 @@
-"use client"
-
-import { useProjectData } from "@/hooks/useProjectData";
 import { Project } from "@/types";
-import { useProjectDataWithoutSignal } from "@/hooks/useProjectDataWithoutSignal";
-import dynamic from "next/dynamic";
 import ProjectCard from "@/components/ProjectCard";
+import { fetchProjectDataWithoutSignal } from "@/api/fetchProjectDataWithoutSignal";
 
 
 
 
-export default function Projects() {
-  const { data, loading, error } = useProjectData<Project[]>(
-    "projects",
-    "projects"
-  );
-  //const {data, loading, error} = useProjectDataWithoutSignal<Project[]>("projects", "projects")
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error fetch the projects</p>;
-
-  if (!data) return null;
+export default async function ProjectsServer({lang}: {lang: string}) {
+  const data = await fetchProjectDataWithoutSignal<Project[]>("projects", lang, "projects");
   const projects = data;
 
   return (
@@ -38,7 +25,7 @@ export default function Projects() {
                 {p.name}
               </a>
             </span>
-            <ProjectCard project={p} />
+            <ProjectCard lang={lang} project={p} />
           </div>
         ))}
       </div>

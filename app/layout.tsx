@@ -1,5 +1,4 @@
 import "./globals.css";
-import { LanguageProvider } from "@/context/LanguageContext";
 
 export default function RootLayout({
   children,
@@ -7,9 +6,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html>
       <body>
-        <LanguageProvider>{children}</LanguageProvider>
+        {children}
       </body>
     </html>
   );

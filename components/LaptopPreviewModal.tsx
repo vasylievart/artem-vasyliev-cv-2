@@ -8,20 +8,23 @@ const LaptopPreviewModal = ({ project, onOpen, laptopRef }: LaptopModalProps) =>
     <div
       ref={laptopRef}
       onClick={() => onOpen(project.tag as TagType, "desktop")}
-      className="flex relative cursor-pointer"
+      className="relative w-90 h-56.25 cursor-pointer"
     >
       <Image
-        src="/frame/laptop_frame_800.webp"
+        src="/frame/laptop_frame_800_1.png"
         alt={project.alt}
         width={360}
-        height={255}
+        height={225}
+        priority={true}
+        sizes="(max-width: 768px) 80vw, 360px"
       />
-      <div className="absolute mt-4 ml-12">
+  
+      <div className="absolute w-65 h-40 top-4 left-12">
         <Image
           src={project.desktop_image}
           alt={project.alt}
-          width={264}
-          height={240}
+          fill
+          sizes="(max-width: 768px) 90vw, 260px"
         />
       </div>
     </div>

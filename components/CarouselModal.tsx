@@ -1,7 +1,9 @@
-import Carousel3D from "@/components/Carousel3D";
 import {CarouselModalProps } from "@/types";
+import dynamic from "next/dynamic";
 
-
+const Carousel3D = dynamic(() => import('./Carousel3D'), {
+  loading: () => <div className="h-64 bg-neutral-800 animate-pulse rounded" />,
+});
 
 const CarouselModal = ({ images, display, onClose }: CarouselModalProps) => {
   return (

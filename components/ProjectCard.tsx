@@ -1,36 +1,61 @@
-"use client";
+"use client"
 
 import Image from "next/image";
-import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import { CarouselImage, Project } from "@/types";
-import { useProjectData } from "@/hooks/useProjectData";
 import { useProjectModal } from "@/hooks/useProjectModal";
-import { useProjectAnimation } from "@/hooks/useProjectAnimation";
+import dynamic from 'next/dynamic';
+import { fetchProjectDataWithoutSignal } from "@/api/fetchProjectDataWithoutSignal";
 import LaptopPreviewModal from "./LaptopPreviewModal";
 import MobilePreviewModal from "./MobilePreviewModal";
-import CarouselModal from "./CarouselModal";
+import { useEffect, useRef, useState } from "react";
+import { useProjectAnimation } from "@/hooks/useProjectAnimation";
+import {gsap} from "gsap";
+import { useGSAP } from "@gsap/react";
+import { fetchProjectImages } from "@/api/fetchProjectImage";
 
 gsap.registerPlugin(useGSAP);
 
-export default function ProjectCard({ project }: { project: Project }) {
+
+const CarouselModal = dynamic(() => import('./CarouselModal'), {
+  loading: () => <div className="h-64 bg-neutral-800 animate-pulse rounded" />,
+});
+
+
+export default function ProjectCard({ 
+  project, 
+  lang }: { 
+    project: Project;
+    lang: string;
+  }) {
+  const [images, setImages] = useState<CarouselImage[]>()
+  const { tag, display, isOpen, open, close } = useProjectModal();
+
+  useEffect(() => {
+  if (!isOpen || !tag || !display) return;
+
+  let cancelled = false;
+
+  async function getImages() {
+    try {
+      const data = await fetchProjectImages(lang, display, tag);
+      if (!cancelled) setImages(data);
+    } catch (err) {
+      console.error("Failed to load carousel images", err);
+    }
+  }
+
+  getImages();
+
+  return () => {
+    cancelled = true;
+  };
+}, [isOpen, lang, display, tag]);
+  
+
   const laptopRef = useRef<HTMLDivElement>(null);
   const mobileRef = useRef<HTMLDivElement>(null);
-
-  const { tag, display, isOpen, open, close } = useProjectModal();
-  const {
-    data: images,
-    error,
-    loading,
-  } = useProjectData<CarouselImage[]>(
-    "projects-details",
-    undefined,
-    display,
-    tag
-  );
-
   useProjectAnimation({ laptopRef, mobileRef });
+
 
   return (
     <div className="project_card_container">
@@ -41,7 +66,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           laptopRef={laptopRef}
         />
       </div>
-
+      
       <div className="mobile_preview">
         <MobilePreviewModal
           project={project}
@@ -49,6 +74,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           mobileRef={mobileRef}
         />
       </div>
+      
 
       <div className="project_description">
         <p className="px-4">{project.description}</p>
@@ -62,16 +88,13 @@ export default function ProjectCard({ project }: { project: Project }) {
               alt={s.alt}
               width={24}
               height={24}
+              loading="lazy"
             />
           ))}
         </span>
       </div>
 
-      {isOpen && loading && <p>Loading carousel...</p>}
-
-      {isOpen && error && <p>Failed to load images</p>}
-
-      {isOpen && images && !loading && (
+      {isOpen && images  && (
         <CarouselModal images={images} display={display} onClose={close} />
       )}
     </div>

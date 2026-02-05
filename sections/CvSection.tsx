@@ -1,9 +1,5 @@
-"use client"
-
-import { useProjectData } from "@/hooks/useProjectData";
-import { useProjectDataWithoutSignal } from "@/hooks/useProjectDataWithoutSignal";
+import { fetchProjectDataWithoutSignal } from "@/api/fetchProjectDataWithoutSignal";
 import { CvProps } from "@/types";
-import { Ellipsis } from "lucide-react";
 import dynamic from "next/dynamic";
 
 const Competence = dynamic(() => import("@/components/Competence"), {
@@ -16,19 +12,9 @@ const Languages = dynamic(() => import("@/components/Education"), {
   loading: () => <div className="h-64 bg-neutral-800 animate-pulse rounded" />
 })
 
-export default function Cv() {
-  const { data, loading, error } = useProjectData<CvProps>("cv", "cv");
-  //const {data, loading, error} = useProjectDataWithoutSignal<CvProps>("cv", "cv");
+export default async function CvServer({lang}: {lang: string}) {
+ const data = await fetchProjectDataWithoutSignal<CvProps>("cv", lang, "cv" )
 
-  if (!data) return null;
-  if (loading)
-    return (
-      <p>
-        <Ellipsis />
-        loaging my data. Pleas wait ;)
-      </p>
-    );
-  if (error) return <p>Error to fetch CV data :(</p>;
 
   return (
     <div className="max-w-3xl">

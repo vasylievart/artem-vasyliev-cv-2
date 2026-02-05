@@ -14,10 +14,11 @@ const MobilePreviewModal = ({ project, onOpen, mobileRef }: MobileModalProps) =>
         src="/frame/mobile_frame_160.webp"
         alt={project.alt}
         width={120}
-        height={240}
+        height={240} 
       />
+    
       <div className="mobile_modal">
-        <Image src={project.mobile_image} alt={project.alt} fill />
+        <Image src={project.mobile_image} alt={project.alt} fill sizes="(max-width: 768px) 90vw, 400px" />
       </div>
     </div>
   );

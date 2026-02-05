@@ -1,11 +1,9 @@
-
-
 import { useEffect, useState } from "react";
 import { useLang } from "@/context/LanguageContext";
 import { DisplayType, ResourceType, SectionType, TagType } from "@/types";
-import { cachedProjectDataLoader } from "@/services/cachedProjectDataLoader";
+import { cachedProjectDataLoaderWithoutSignal } from "@/services/cachedProjectDataLoaderWithoutSignal";
 
-export function useProjectData<T>(
+export function useProjectDataWithoutSignal<T>(
   resource: ResourceType,
   section?: SectionType,
   display?: DisplayType,
@@ -18,18 +16,16 @@ export function useProjectData<T>(
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const controller = new AbortController();
 
     setLoading(true);
     setError(null);
 
-    cachedProjectDataLoader<T>(
+    cachedProjectDataLoaderWithoutSignal<T>(
       resource,
       lang,
       section,
       display,
       tag,
-      controller.signal
     )
       .then(setData)
       .catch((err) => {
@@ -38,7 +34,6 @@ export function useProjectData<T>(
       })
       .finally(() => setLoading(false));
 
-    return () => controller.abort();
   }, [resource, section, tag, display, lang]);
 
   return { data, loading, error };
